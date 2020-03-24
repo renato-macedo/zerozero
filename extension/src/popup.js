@@ -26,8 +26,31 @@ signupOpt.addEventListener('click', () => {
   loginContainer.classList.add('deactivate');
 });
 
-document.getElementById('create-btn').addEventListener('click', function(e) {
-  chrome.runtime.sendMessage({ message: 'create' }, response => {
-    console.log(response);
-  });
+document.getElementById('create-btn').addEventListener('click', () => {
+  const field = document.getElementById('room-code');
+
+  chrome.runtime.sendMessage(
+    { message: 'create-room', payload: { username: 'renato' } },
+    response => {
+      console.log(response);
+      field.textContent = response.room;
+    }
+  );
+});
+
+document.getElementById('join-btn').addEventListener('click', () => {
+  const field = document.getElementById('join-input');
+
+  if (field.value) {
+    chrome.runtime.sendMessage(
+      {
+        message: 'join-room',
+        payload: { username: 'johndoe', room: field.value }
+      },
+      response => {
+        console.log(response);
+        field.textContent = 'ok';
+      }
+    );
+  }
 });

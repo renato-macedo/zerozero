@@ -13,6 +13,7 @@ const rule1 = {
 };
 
 chrome.runtime.onInstalled.addListener(() => {
+  const socket = io('http://localhost:3000/');
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     console.log('ok');
     chrome.declarativeContent.onPageChanged.addRules([rule1]);
@@ -20,10 +21,21 @@ chrome.runtime.onInstalled.addListener(() => {
 
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log({ request, sender });
-    sendResponse('ok');
+
+    const { message, payload } = request;
+    const username = 'renato';
+    socket.emit(request.message, payload);
+
+    socket.on('created', message => {
+      sendResponse(message);
+    });
+
+    socket.on('joined', message => {
+      sendResponse(message);
+    });
+    return true;
   });
   // chrome.browserAction.onClicked.addListener(tab => {
-  //   const socket = io('http://localhost:3000/');
-  //   console.log(socket);
+
   // });
 });
