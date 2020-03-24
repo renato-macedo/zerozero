@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Popup</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+      Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font: 400 13.3333px Arial;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3%;
+    border: 1px solid black;
+    height: 20rem;
+    width: 25rem;
+    background-color: #ffffff;
+  }
+
+
+  .option {
+    width: 100%;
+    height: 15%;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .option li {
+    text-align: center;
+    padding: 4%;
+    border: 1px solid black;
+    width: 50%;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .form {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-evenly; */
+    align-items: center;
+    width: 100%;
+    height: 60%;
+  }
+
+
+
+  .activate {
+    background-color: black;
+    color: #ddd;
+  }
+
+  .deactivate {
+    display: none;
+  }
+
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <ul class="option">
+      <li class="signup-option activate">Create Session</li>
+      <li class="login-option">Join Session</li>
+    </ul>
+
+
+
+    <div class="form create">
+      <button class="btn btn-block" id="create-btn" style="background-color: black;color: white;">Create
+        Session</button>
+      <div class="form-group">
+
+
+        <input type="text" style="border-style: dotted;" class="form-control mt-3" id="exampleInputEmail1"
+          placeholder="" disabled aria-describedby="emailHelp">
+        <small id="emailHelp" class="form-text text-muted">Send to your friends</small>
+      </div>
+
+    </div>
+    <div class="form join deactivate ">
+      <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Paste the session's code here"
+          aria-label="Paste the session's code here" aria-describedby="button-addon2">
+
+      </div>
+      <button class="btn btn-block" type="button" id="join-btn"
+        style="background-color: black;color: white;">Join</button>
+    </div>
+    <div id="error">
+      Invalid Crendentials
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+
+</html>
