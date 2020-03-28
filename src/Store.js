@@ -6,10 +6,9 @@ class Store {
   filterUsersByRoom(room) {
     const collection = [];
     //console.log(this.Users);
-    for (const [userID, { name, roomID }] of this.Users) {
-      //console.log(name, roomID);
+    for (const [userID, { nickname, roomID }] of this.Users) {
       if (roomID === room) {
-        collection.push({ name });
+        collection.push({ nickname });
       }
     }
     return collection;
@@ -18,7 +17,7 @@ class Store {
   getUsers() {
     const users = {};
     this.Users.forEach((value, key) => {
-      users[key] = { name: value.name, id: value.id, room: value.room };
+      users[key] = { nickname: value.nickname, id: value.id, room: value.room };
     });
 
     return users;

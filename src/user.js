@@ -1,6 +1,6 @@
 class User {
-  constructor(socket, name, roomID) {
-    this.name = name;
+  constructor(socket, nickname, roomID) {
+    this.nickname = nickname;
     this.id = socket.id;
     this.roomID = roomID;
     this.socket = socket;

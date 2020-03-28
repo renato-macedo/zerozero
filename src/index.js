@@ -16,15 +16,15 @@ app.get('/', (req, res) => {
 io.on('connection', socket => {
   console.log('a user connected', socket.id);
 
-  socket.on('create-room', ({ username }) => {
-    const user = new User(socket, username, uuid());
+  socket.on('create-room', ({ nickname }) => {
+    const user = new User(socket, nickname, uuid());
     store.addUser(user);
     socket.emit('created', { room: user.roomID });
   });
 
-  socket.on('join-room', ({ username, room }) => {
-    console.log(username, room);
-    const user = new User(socket, username, room);
+  socket.on('join-room', ({ nickname, room }) => {
+    console.log(nickname, room);
+    const user = new User(socket, nickname, room);
     store.addUser(user);
     socket.emit('joined', { users: store.filterUsersByRoom(room) });
   });

@@ -20,7 +20,6 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log(request);
     const { type, payload } = request;
-    const username = 'renato';
 
     // query the active tab and forward the message
     chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
