@@ -2,28 +2,38 @@ const app = require('express')();
 const http = require('http').createServer(app);
 const { v4: uuid } = require('uuid');
 
-const { users, User, filterUsersByRoom } = require('./user');
+const User = require('./user');
+const Store = require('./Store');
 const io = require('socket.io')(http);
 
-app.get('/', function(req, res) {
-  console.log(users);
-  return res.json({ users: Array.from(users) });
+const store = new Store();
+
+app.get('/', (req, res) => {
+  // console.log(users);
+  return res.json(store.getUsers());
 });
 
-io.on('connection', function(socket) {
+io.on('connection', socket => {
   console.log('a user connected', socket.id);
 
   socket.on('create-room', ({ username }) => {
     const user = new User(socket, username, uuid());
-    socket.emit('created', { room: user._roomID });
+    store.addUser(user);
+    socket.emit('created', { room: user.roomID });
   });
 
   socket.on('join-room', ({ username, room }) => {
+    console.log(username, room);
     const user = new User(socket, username, room);
-
-    socket.emit('joined', { users: filterUsersByRoom(room) });
+    store.addUser(user);
+    socket.emit('joined', { users: store.filterUsersByRoom(room) });
   });
-  socket.on('disconnect', function() {
+
+  socket.on('timeout', () => {
+    console.log('timeout', socket.id);
+  });
+  socket.on('disconnect', () => {
+    store.removeUser(socket.id);
     console.log('user disconnected');
   });
 });

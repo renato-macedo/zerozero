@@ -1,5 +1,3 @@
-import io from 'socket.io-client';
-
 const rule1 = {
   conditions: [
     new chrome.declarativeContent.PageStateMatcher({
@@ -13,29 +11,25 @@ const rule1 = {
 };
 
 chrome.runtime.onInstalled.addListener(() => {
-  const socket = io('http://localhost:3000/');
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     console.log('ok');
     chrome.declarativeContent.onPageChanged.addRules([rule1]);
   });
 
+  // listening to message from popup.js
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log({ request, sender });
-
-    const { message, payload } = request;
+    console.log(request);
+    const { type, payload } = request;
     const username = 'renato';
-    socket.emit(request.message, payload);
 
-    socket.on('created', message => {
-      sendResponse(message);
+    // query the active tab and forward the message
+    chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
+      // response from content.js
+      chrome.tabs.sendMessage(tabs[0].id, { type, payload }, response => {
+        sendResponse(response);
+      });
     });
 
-    socket.on('joined', message => {
-      sendResponse(message);
-    });
     return true;
   });
-  // chrome.browserAction.onClicked.addListener(tab => {
-
-  // });
 });

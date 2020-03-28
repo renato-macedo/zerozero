@@ -29,28 +29,29 @@ signupOpt.addEventListener('click', () => {
 document.getElementById('create-btn').addEventListener('click', () => {
   const field = document.getElementById('room-code');
 
-  chrome.runtime.sendMessage(
-    { message: 'create-room', payload: { username: 'renato' } },
-    response => {
-      console.log(response);
-      field.textContent = response.room;
-    }
-  );
+  const message = { type: 'create-room', payload: { username: 'renato' } };
+
+  console.log('sending', message);
+  // send message to the background.js
+  chrome.runtime.sendMessage(message, response => {
+    console.log(response);
+    field.textContent = response.room;
+  });
 });
 
 document.getElementById('join-btn').addEventListener('click', () => {
   const field = document.getElementById('join-input');
 
   if (field.value) {
-    chrome.runtime.sendMessage(
-      {
-        message: 'join-room',
-        payload: { username: 'johndoe', room: field.value }
-      },
-      response => {
-        console.log(response);
-        field.textContent = 'ok';
-      }
-    );
+    const message = {
+      type: 'join-room',
+      payload: { username: 'johndoe', room: field.value }
+    };
+
+    // send message to the background.js
+    chrome.runtime.sendMessage(message, response => {
+      console.log(response);
+      field.textContent = 'ok';
+    });
   }
 });
