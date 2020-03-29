@@ -1,6 +1,6 @@
 const app = require('express')();
 const http = require('http').createServer(app);
-const { v4: uuid } = require('uuid');
+const shortid = require('shortid');
 
 const User = require('./user');
 const Store = require('./Store');
@@ -17,7 +17,8 @@ io.on('connection', socket => {
   console.log('a user connected', socket.id);
 
   socket.on('create-room', ({ nickname }) => {
-    const user = new User(socket, nickname, uuid());
+    const roomID = shortid.generate();
+    const user = new User(socket, nickname, roomID);
     store.addUser(user);
     socket.emit('created', { room: user.roomID });
   });
@@ -29,8 +30,8 @@ io.on('connection', socket => {
     socket.emit('joined', { users: store.filterUsersByRoom(room) });
   });
 
-  socket.on('progress', ({ time, room }) => {
-    socket.to(room).emit('time', { time });
+  socket.on('seeked', ({ time, room }) => {
+    socket.to(room).emit('seeked', { time });
   });
 
   socket.on('play', ({ room }) => {

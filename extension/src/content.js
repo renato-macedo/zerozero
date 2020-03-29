@@ -38,14 +38,13 @@ function startListening() {
 
   console.log(video.currentTime);
 
-  const progressBar = document.querySelector(
-    '#movie_player > div.ytp-chrome-bottom > div.ytp-progress-bar-container'
-  );
-
-  User.connection.on('time', message => {
+  User.connection.on('seeked', message => {
+    video.onseeked = PreventNextSeeked(User, video);
     console.log(message);
     video.currentTime = message.time;
   });
+
+  video.onseeked = EmitSeeked(User, video);
 
   video.onpause = () => {
     User.connection.emit('pause', { room: User.room });
@@ -62,9 +61,23 @@ function startListening() {
   User.connection.on('play', () => {
     video.play();
   });
+}
 
-  progressBar.addEventListener('click', e => {
-    const time = video.currentTime;
-    User.connection.emit('progress', { time, room: User.room });
-  });
+// the following functions will alternate as listeners from the seeked event
+function EmitSeeked(User, video) {
+  return function() {
+    // video.onseeked = PreventNextSeeked(User, video);
+    User.connection.emit('seeked', {
+      time: video.currentTime,
+      room: User.room
+    });
+  };
+}
+
+function PreventNextSeeked(User, video) {
+  return function(e) {
+    console.log(e);
+    //e.preventDefault();
+    video.onseeked = EmitSeeked(User, video);
+  };
 }

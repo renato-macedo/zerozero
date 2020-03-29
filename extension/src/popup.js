@@ -29,17 +29,22 @@ signupOpt.addEventListener('click', () => {
 document.getElementById('create-btn').addEventListener('click', () => {
   const field = document.getElementById('room-code');
   const nickname = document.getElementById('create-nickname').value;
+  console.log(nickname);
+  if (nickname) {
+    console.log('ué');
+    const message = { type: 'create-room', payload: { nickname } };
 
-  const message = { type: 'create-room', payload: { nickname } };
-
-  console.log('sending', message);
-  // send message to the background.js
-  chrome.runtime.sendMessage(message, response => {
-    console.log(response);
-    if (response) {
-      field.textContent = response.room;
-    }
-  });
+    console.log('sending', message);
+    // send message to the background.js
+    chrome.runtime.sendMessage(message, response => {
+      console.log(response);
+      if (response) {
+        field.textContent = response.room;
+      }
+    });
+  } else {
+    displayError(true);
+  }
 });
 
 document.getElementById('join-btn').addEventListener('click', () => {
@@ -57,5 +62,7 @@ document.getElementById('join-btn').addEventListener('click', () => {
       console.log(response);
       field.value = 'ok';
     });
+  } else {
+    displayError(true);
   }
 });
