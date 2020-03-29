@@ -29,9 +29,18 @@ io.on('connection', socket => {
     socket.emit('joined', { users: store.filterUsersByRoom(room) });
   });
 
-  socket.on('timeout', () => {
-    console.log('timeout', socket.id);
+  socket.on('progress', ({ time, room }) => {
+    socket.to(room).emit('time', { time });
   });
+
+  socket.on('play', ({ room }) => {
+    socket.to(room).emit('play');
+  });
+
+  socket.on('pause', ({ room }) => {
+    socket.to(room).emit('pause');
+  });
+
   socket.on('disconnect', () => {
     store.removeUser(socket.id);
     console.log('user disconnected');
