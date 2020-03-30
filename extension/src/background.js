@@ -12,13 +12,11 @@ const rule1 = {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    console.log('ok');
     chrome.declarativeContent.onPageChanged.addRules([rule1]);
   });
 
   // listening to message from popup.js
   chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    console.log(request);
     const { type, payload } = request;
 
     // query the active tab and forward the message

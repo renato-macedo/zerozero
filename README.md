@@ -4,7 +4,7 @@ This a chrome extension that syncs videos using WebSockets
 
 ## How it works
 
-You you open a youtube video (currently is the only supported website), create a room and share the code with a friend who also has the extension installed.
+You open a youtube video (currently is the only supported website), create a room and share the code with a friend who also has the extension installed.
 For development, you may want to open another tab.
 
 ### Running the express server

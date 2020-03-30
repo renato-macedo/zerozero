@@ -5,7 +5,7 @@ class Store {
 
   filterUsersByRoom(room) {
     const collection = [];
-    //console.log(this.Users);
+
     for (const [userID, { nickname, roomID }] of this.Users) {
       if (roomID === room) {
         collection.push({ nickname });

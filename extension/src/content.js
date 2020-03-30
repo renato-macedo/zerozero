@@ -36,11 +36,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 function startListening() {
   const video = document.querySelector('video');
 
-  console.log(video.currentTime);
-
   User.connection.on('seeked', message => {
     video.onseeked = PreventNextSeeked(User, video);
-    console.log(message);
+
     video.currentTime = message.time;
   });
 
@@ -66,7 +64,6 @@ function startListening() {
 // the following functions will alternate as listeners from the seeked event
 function EmitSeeked(User, video) {
   return function() {
-    // video.onseeked = PreventNextSeeked(User, video);
     User.connection.emit('seeked', {
       time: video.currentTime,
       room: User.room
@@ -76,8 +73,6 @@ function EmitSeeked(User, video) {
 
 function PreventNextSeeked(User, video) {
   return function(e) {
-    console.log(e);
-    //e.preventDefault();
     video.onseeked = EmitSeeked(User, video);
   };
 }

@@ -9,13 +9,10 @@ const io = require('socket.io')(http);
 const store = new Store();
 
 app.get('/', (req, res) => {
-  // console.log(users);
   return res.json(store.getUsers());
 });
 
 io.on('connection', socket => {
-  console.log('a user connected', socket.id);
-
   socket.on('create-room', ({ nickname }) => {
     const roomID = shortid.generate();
     const user = new User(socket, nickname, roomID);
@@ -24,7 +21,6 @@ io.on('connection', socket => {
   });
 
   socket.on('join-room', ({ nickname, room }) => {
-    console.log(nickname, room);
     const user = new User(socket, nickname, room);
     store.addUser(user);
     socket.emit('joined', { users: store.filterUsersByRoom(room) });
@@ -44,7 +40,6 @@ io.on('connection', socket => {
 
   socket.on('disconnect', () => {
     store.removeUser(socket.id);
-    console.log('user disconnected');
   });
 });
 
